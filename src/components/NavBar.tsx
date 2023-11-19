@@ -2,7 +2,7 @@
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { usePathname, useRouter } from 'next/navigation'
-import { IoTimer } from 'react-icons/io5'
+import { FiClock } from 'react-icons/fi'
 import { Button } from './ui/button'
 
 const NavBar = () => {
@@ -18,10 +18,10 @@ const NavBar = () => {
 
     return (
         <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-1'>
-                <IoTimer className='h-6 w-6' />
+            <a href='/' className='flex items-center gap-1'>
+                <FiClock className='h-6 w-6' />
                 <h1>Time Journal</h1>
-            </div>
+            </a>
 
             {!isAuthPage ? (
                 <Button onClick={handleLogout}>Logout</Button>
