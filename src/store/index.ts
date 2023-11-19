@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface Log {
+export interface Log {
     date: Date
     hours: number
     note: string

@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useLogStore } from '@/store'
 import { ToastAction } from '@radix-ui/react-toast'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import dayjs from 'dayjs'
 import { GrAdd } from 'react-icons/gr'
 import { DatePicker } from './DatePicker'
@@ -22,6 +23,7 @@ import { useToast } from './ui/use-toast'
 const NewLog = () => {
     const { logs, log, setLog, setLogs } = useLogStore()
     const { toast } = useToast()
+    const supabase = createClientComponentClient()
 
     const closeDialog = () => {
         document.getElementById('dialog-close-btn')?.click()
@@ -48,9 +50,21 @@ const NewLog = () => {
         }
     }
 
-    const logSubmitHandler = () => {
+    const logSubmitHandler = async () => {
         try {
             validateLog()
+            // Write to supabase
+            const { error } = await supabase
+                .from('logs')
+                .upsert({
+                    ...log,
+                    date: dayjs(log.date).format('YYYY-MM-DD')
+                })
+                .select('*')
+                .single()
+
+            if (error) throw error.message
+
             setLogs(log, dayjs(log.date).format('YYYY-MM-DD'))
             closeDialog()
             toast({

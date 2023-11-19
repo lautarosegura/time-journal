@@ -9,6 +9,7 @@ import {
     TableHeader,
     TableRow
 } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 import { useLogStore } from '@/store'
 
 const Logs = () => {
@@ -27,19 +28,26 @@ const Logs = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {Object.keys(logs).map((key) => {
-                            const log = logs[key]
+                        {Object.keys(logs)
+                            .sort()
+                            .map((key) => {
+                                const log = logs[key]
 
-                            return (
-                                <TableRow key={key}>
-                                    <TableCell>
-                                        {log?.date.toDateString()}
-                                    </TableCell>
-                                    <TableCell>{log?.hours}</TableCell>
-                                    <TableCell>{log?.note}</TableCell>
-                                </TableRow>
-                            )
-                        })}
+                                return (
+                                    <TableRow
+                                        key={key}
+                                        className={cn(
+                                            log.hours < 5 ? 'bg-red-100' : ''
+                                        )}
+                                    >
+                                        <TableCell>
+                                            {log?.date.toDateString()}
+                                        </TableCell>
+                                        <TableCell>{log?.hours}</TableCell>
+                                        <TableCell>{log?.note}</TableCell>
+                                    </TableRow>
+                                )
+                            })}
                     </TableBody>
                 </Table>
             ) : (
